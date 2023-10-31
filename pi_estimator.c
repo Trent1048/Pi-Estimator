@@ -50,5 +50,24 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    printf("Estimate for pi = %f\n", (double)hits / dart_throws * 4.0);
+    double pi_actual_value = 3.141592653589793238462643383279502884197; // from google
+    double pi_estimated_value = (double)hits / dart_throws * 4.0;
+
+    int accuracy = 0;
+    long long int decimal_place_to_check = 1;
+    while (1) {
+        if ((int)(pi_actual_value * decimal_place_to_check) ==
+            (int)(pi_estimated_value * decimal_place_to_check)) {
+            accuracy++;
+            decimal_place_to_check *= 10;
+
+            // the actual value for pi in this program doesn't even have that many digits
+            if (accuracy > 100) break;
+        }
+        else {
+            break;
+        }
+    }
+
+    printf("Estimate for pi = %f\nAccuracy = %d decimal places\n", pi_estimated_value, accuracy);
 }
