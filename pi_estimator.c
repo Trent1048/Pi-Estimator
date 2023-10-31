@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[]) {
 
-    // TODO record the runtime of this program
+    double time = omp_get_wtime();
 
     long long int dart_throws;
 	if(argc<2) {
@@ -69,5 +69,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    printf("Estimate for pi = %f\nAccuracy = %d decimal places\n", pi_estimated_value, accuracy);
+    time = omp_get_wtime() - time;
+
+    printf("Estimate for pi = %f\nAccuracy = %d decimal places\nElapsed time = %f seconds\n",
+        pi_estimated_value, accuracy, time);
 }
