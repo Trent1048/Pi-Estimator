@@ -12,8 +12,6 @@
 
 int main(int argc, char *argv[]) {
 
-    double time = omp_get_wtime();
-
     long long int dart_throws;
 	if(argc<2) {
 		printf("Usage: pi <n: number of darts to throw> <p: number of threads>\n");
@@ -38,17 +36,24 @@ int main(int argc, char *argv[]) {
     double circle_center = 0.5;
     double squared_circle_radius = 0.25;
 
+    double time = omp_get_wtime();
+
     long long int hits = 0;
-    #pragma omp parallel for schedule(static) reduction(+:hits)
+    #pragma omp parallel for reduction(+:hits)
     for(long long int i = 0; i < dart_throws; i++) {
-        double x = drand48();
-        double y = drand48();
+
+        int seed = (omp_get_thread_num() + 1) * i;
+
+        double x = (double)rand_r(&seed) / RAND_MAX;
+        double y = (double)rand_r(&seed) / RAND_MAX;
 
         double squared_dist_from_center = pow(x - circle_center, 2) + pow(y - circle_center, 2);
         if (squared_dist_from_center < squared_circle_radius) {
             hits++;
         }
     }
+    
+    time = omp_get_wtime() - time;
 
     double pi_actual_value = 3.141592653589793238462643383279502884197; // from google
     double pi_estimated_value = (double)hits / dart_throws * 4.0;
@@ -68,8 +73,6 @@ int main(int argc, char *argv[]) {
             break;
         }
     }
-
-    time = omp_get_wtime() - time;
 
     printf("Estimate for pi = %f\nAccuracy = %d decimal places\nElapsed time = %f seconds\n",
         pi_estimated_value, accuracy, time);
