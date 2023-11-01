@@ -55,14 +55,14 @@ int main(int argc, char *argv[]) {
     
     time = omp_get_wtime() - time;
 
-    double pi_actual_value = 3.141592653589793238462643383279502884197; // from google
+    double pi_actual_value = 3.1415926535897932384; // from google
     double pi_estimated_value = (double)hits / dart_throws * 4.0;
 
     int accuracy = 0;
     long long int decimal_place_to_check = 1;
     while (1) {
-        if ((int)(pi_actual_value * decimal_place_to_check) ==
-            (int)(pi_estimated_value * decimal_place_to_check)) {
+        if ((long long int)(pi_actual_value * decimal_place_to_check) ==
+            (long long int)(pi_estimated_value * decimal_place_to_check)) {
             accuracy++;
             decimal_place_to_check *= 10;
 
@@ -74,6 +74,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    printf("Estimate for pi = %f\nAccuracy = %d decimal places\nElapsed time = %f seconds\n",
+    printf("Estimate for pi = %.17g\nAccuracy = %d decimal places\nElapsed time = %f seconds\n",
         pi_estimated_value, accuracy, time);
 }
